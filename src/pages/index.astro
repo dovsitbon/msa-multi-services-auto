@@ -73,7 +73,7 @@ const jsonLd = [
       addressRegion: site.region,
       addressCountry: 'FR',
     },
-    geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+    ...(site.geo ? { geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng } } : {}),
     hasMap: links.googleListing,
     areaServed: [site.city, ...site.neighbours].map((name) => ({ '@type': 'City', name })),
     openingHoursSpecification: [

@@ -14,8 +14,8 @@ export const site = {
   region: "Val-d'Oise",
   rating: { value: '3,4', count: 'environ 210' },
   payments: ['Carte bancaire', 'Sans contact'],
-  // Coordonnées approximatives de Groslay : [À CONFIRMER] position exacte du 16 route de Calais.
-  geo: { lat: 48.9856, lng: 2.3497 },
+  // Position GPS exacte du 16 route de Calais : [À CONFIRMER]. Ex. { lat: 48.98, lng: 2.35 } ; le JSON-LD l'ajoute dès qu'elle est renseignée.
+  geo: null as { lat: number; lng: number } | null,
   // Réseaux sociaux / fiche Google exacte : [À CONFIRMER] (laisser vide tant qu'inconnu).
   sameAs: [] as string[],
   // Numéro WhatsApp au format international sans espaces ni +, ex. '336XXXXXXXX'. [À CONFIRMER]
