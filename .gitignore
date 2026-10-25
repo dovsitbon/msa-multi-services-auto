@@ -5,3 +5,6 @@ dist/
 .vercel/
 npm-debug.log*
 .DS_Store
+
+.vercel
+.env*
