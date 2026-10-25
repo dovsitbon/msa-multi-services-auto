@@ -1,0 +1,15 @@
+---
+import { site, links } from '../data/site';
+---
+
+<div
+  class="fixed inset-x-0 bottom-0 z-30 grid grid-cols-[1.4fr_1fr] gap-2 border-t-4 border-ink bg-concrete p-2 md:hidden"
+  style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom));"
+>
+  <a href={site.phoneHref} class="btn btn-signal text-[1.2rem]" aria-label={`Appeler le ${site.phone}`}>
+    Appeler
+  </a>
+  <a href={links.directions} class="btn btn-paper text-[1.2rem]" rel="noopener" target="_blank">
+    Itinéraire
+  </a>
+</div>

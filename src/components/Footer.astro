@@ -1,0 +1,49 @@
+---
+import { site, hours, fmt, links } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-ink text-paper">
+  <div class="hazard h-4" aria-hidden="true"></div>
+  <div class="mx-auto grid max-w-[1240px] gap-10 px-4 py-12 md:grid-cols-[1.3fr_1fr_1fr] md:px-6">
+    <div>
+      <p class="sign text-[2.6rem] font-black text-signal">{site.name}</p>
+      <p class="mt-1 text-concrete">Aussi connue comme « {site.alias} »</p>
+      <address class="mt-5 not-italic leading-relaxed">
+        {site.street}<br />
+        {site.postalCode} {site.city}<br />
+        <a href={site.phoneHref} class="mt-2 inline-flex min-h-[44px] items-center text-xl font-bold text-signal underline underline-offset-4">
+          {site.phone}
+        </a>
+      </address>
+      <a href={links.directions} target="_blank" rel="noopener" class="inline-flex min-h-[44px] items-center underline underline-offset-4">
+        Itinéraire Google Maps
+      </a>
+    </div>
+    <div>
+      <h2 class="sign text-2xl font-extrabold text-signal">Horaires</h2>
+      <ul class="mt-3 space-y-1">
+        {
+          hours.map((h) => (
+            <li class="flex justify-between gap-4 border-b border-white/15 py-1">
+              <span>{h.label}</span>
+              <span class="tabular-nums">
+                {fmt(h.open)} – {fmt(h.close)}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div>
+      <h2 class="sign text-2xl font-extrabold text-signal">Le site</h2>
+      <ul class="mt-3">
+        <li><a href="/#demande" class="inline-flex min-h-[44px] items-center underline-offset-4 hover:underline">Demander une pièce</a></li>
+        <li><a href="/mentions-legales/" class="inline-flex min-h-[44px] items-center underline-offset-4 hover:underline">Mentions légales</a></li>
+        <li><a href="/confidentialite/" class="inline-flex min-h-[44px] items-center underline-offset-4 hover:underline">Politique de confidentialité</a></li>
+      </ul>
+      <p class="mt-4 text-sm text-concrete">Pièces auto d'occasion et atelier à Groslay, pour {site.neighbours.slice(0, 4).join(', ')} et alentours.</p>
+    </div>
+  </div>
+  <p class="mx-auto max-w-[1240px] px-4 pb-[104px] text-sm text-concrete md:px-6 md:pb-8">© {year} {site.name}</p>
+</footer>

@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base
+  title="Mentions légales | MSA Multi Services Auto, Groslay"
+  description="Mentions légales du site de MSA Multi Services Auto, casse automobile et garage au 16 route de Calais (RN1) à Groslay."
+>
+  <section class="bg-paper">
+    <div class="prose-legal mx-auto max-w-[1240px] px-4 py-14 md:px-6">
+      <h1 class="sign text-[3.2rem] font-black sm:text-[4.5rem]">Mentions légales</h1>
+
+      <h2>Éditeur du site</h2>
+      <p>
+        {site.name}<br />
+        {site.street}, {site.postalCode} {site.city}<br />
+        Téléphone : <a href={site.phoneHref}>{site.phone}</a>
+      </p>
+      <ul>
+        <li>Forme juridique et capital : <span class="todo">[À CONFIRMER]</span></li>
+        <li>SIRET : <span class="todo">[À CONFIRMER]</span></li>
+        <li>RCS : <span class="todo">[À CONFIRMER]</span></li>
+        <li>Numéro de TVA intracommunautaire : <span class="todo">[À CONFIRMER]</span></li>
+        <li>Directeur de la publication : <span class="todo">[À CONFIRMER]</span></li>
+        <li>Adresse e-mail de contact : <span class="todo">[À CONFIRMER]</span></li>
+      </ul>
+
+      <h2>Hébergement</h2>
+      <p>
+        Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis.<br />
+        Site : <a href="https://vercel.com" rel="noopener">vercel.com</a>
+      </p>
+
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        Les textes, la mise en page et les éléments graphiques de ce site appartiennent à {site.name}, sauf mention contraire.
+        Les extraits d’avis proviennent de la fiche Google de l’établissement.
+      </p>
+
+      <h2>Responsabilité</h2>
+      <p>
+        Les informations du site (horaires, services) sont données à titre indicatif. Disponibilité et prix d’une pièce :
+        confirmez par téléphone au <a href={site.phoneHref}>{site.phone}</a> avant de vous déplacer.
+      </p>
+
+      <h2>Données personnelles</h2>
+      <p>Voir la <a href="/confidentialite/">politique de confidentialité</a>.</p>
+    </div>
+  </section>
+</Base>

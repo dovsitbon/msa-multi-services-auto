@@ -1,0 +1,14 @@
+# MSA Multi Services Auto (Casse RN1)
+
+> Casse automobile (vente de pièces d'occasion) et atelier mécanique au 16 route de Calais (RN1), 95410 Groslay, Val-d'Oise. Téléphone : 01 39 84 17 91.
+
+- Horaires : lundi au samedi 9h00-18h00, dimanche 9h00-13h00.
+- Services : pièces d'occasion (moteurs, boîtes de vitesses, électricité, carrosserie, optiques), montage en atelier, mécanique générale (boîtes de vitesses, embrayages).
+- Demande de pièce en ligne : formulaire sur la page d'accueil, réponse par téléphone ou SMS.
+- Paiement : carte bancaire, sans contact.
+- Communes proches : Montmorency, Saint-Brice-sous-Forêt, Sarcelles, Deuil-la-Barre, Montmagny, Domont, Ézanville.
+
+## Pages
+- [Accueil et demande de pièce](https://msa-multi-services-auto.vercel.app/)
+- [Mentions légales](https://msa-multi-services-auto.vercel.app/mentions-legales/)
+- [Confidentialité](https://msa-multi-services-auto.vercel.app/confidentialite/)

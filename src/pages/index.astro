@@ -1,0 +1,549 @@
+---
+import Base from '../layouts/Base.astro';
+import Status from '../components/Status.astro';
+import PartForm from '../components/PartForm.astro';
+import PhotoSlot from '../components/PhotoSlot.astro';
+import { site, hours, fmt, links } from '../data/site';
+
+const title = 'Casse auto RN1 Groslay : pièces d’occasion et garage | MSA';
+const description =
+  'Casse auto et atelier au 16 route de Calais (RN1), Groslay. Demandez votre pièce d’occasion en ligne avant de venir. Ouvert 7j/7, dimanche 9h-13h. 01 39 84 17 91.';
+
+const steps = [
+  {
+    title: 'Vous demandez la pièce',
+    text: `Avec le formulaire, au ${site.phone} ou directement au comptoir.`,
+  },
+  {
+    title: 'On vérifie le stock et on démonte',
+    text: 'On vous répond par téléphone ou SMS. Si la pièce est là, on la démonte pour vous.',
+    stamp: true,
+  },
+  {
+    title: 'Vous la récupérez à la caisse',
+    text: 'Au 16 route de Calais, à la caisse centrale. Paiement par carte ou sans contact.',
+  },
+];
+
+const reviews = [
+  'On y trouve de tout, et surtout à des prix super concurrentiels.',
+  'Le chef d’atelier est très professionnel, et le travail effectué est également très bon.',
+  'Top, prix très correct. Boîte de vitesse 1.2 PureTech boîte 6.',
+];
+
+type Faq = { q: string; a: string; confirmed: boolean };
+const faqs: Faq[] = [
+  {
+    q: 'Comment savoir si vous avez ma pièce avant de venir ?',
+    a: `Remplissez le formulaire « Demander une pièce » ou appelez le ${site.phone}. On vérifie le stock et on vous répond par téléphone ou SMS.`,
+    confirmed: true,
+  },
+  {
+    q: 'Êtes-vous ouverts le dimanche ?',
+    a: 'Oui, le dimanche de 9h00 à 13h00. Du lundi au samedi, de 9h00 à 18h00.',
+    confirmed: true,
+  },
+  {
+    q: 'Quels moyens de paiement acceptez-vous ?',
+    a: 'La carte bancaire, y compris le paiement sans contact, à la caisse centrale.',
+    confirmed: true,
+  },
+  { q: 'Les pièces sont-elles testées ?', a: '', confirmed: false },
+  { q: 'Puis-je venir avec mon mécanicien ?', a: '', confirmed: false },
+  { q: 'Montez-vous les pièces achetées ailleurs ?', a: '', confirmed: false },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': ['AutoPartsStore', 'AutoRepair'],
+    '@id': `${site.url}/#commerce`,
+    name: site.name,
+    alternateName: site.alias,
+    url: site.url,
+    image: `${site.url}/og.png`,
+    telephone: site.phoneIntl,
+    priceRange: '€',
+    paymentAccepted: 'Carte bancaire, sans contact',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: '16 route de Calais (RN1)',
+      postalCode: site.postalCode,
+      addressLocality: site.city,
+      addressRegion: site.region,
+      addressCountry: 'FR',
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+    hasMap: links.googleListing,
+    areaServed: [site.city, ...site.neighbours].map((name) => ({ '@type': 'City', name })),
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        opens: '09:00',
+        closes: '18:00',
+      },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Sunday', opens: '09:00', closes: '13:00' },
+    ],
+    ...(site.sameAs.length ? { sameAs: site.sameAs } : {}),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs
+      .filter((f) => f.confirmed)
+      .map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={jsonLd}>
+  <!-- PREMIER ÉCRAN : 16 / RN1 + bon de demande -->
+  <section class="bg-signal" aria-labelledby="h1">
+    <div class="mx-auto grid max-w-[1240px] gap-10 px-4 pb-14 pt-8 md:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:gap-12 lg:pb-20 lg:pt-12">
+      <div class="min-w-0">
+        <p class="flex items-end gap-4 sm:gap-6" aria-label="16 route de Calais, RN1">
+          <span class="sign text-[8.5rem] font-black leading-[0.75] tracking-[-0.03em] sm:text-[12rem] xl:text-[15rem]" aria-hidden="true">16</span>
+          <span class="flex flex-col gap-2 pb-1" aria-hidden="true">
+            <span class="cartouche px-3 py-1.5 text-[3.4rem] sm:text-[5rem] xl:text-[6.2rem]">RN1</span>
+            <span class="sign text-[1.35rem] font-extrabold sm:text-[1.7rem]">Route de Calais</span>
+          </span>
+        </p>
+
+        <h1 id="h1" class="sign mt-8 max-w-[14ch] text-[3rem] font-black sm:text-[4.2rem] xl:text-[5rem]">
+          Pièces auto d’occasion et atelier, sur la RN1 à Groslay
+        </h1>
+        <p class="mt-5 max-w-[46ch] text-[1.15rem] leading-relaxed">
+          Casse et garage au 16 route de Calais. Dites-nous quelle pièce il vous faut :
+          on vérifie le stock avant que vous preniez la route.
+        </p>
+
+        <Status class="mt-6" />
+
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <a href={site.phoneHref} class="btn btn-ink">Appeler le {site.phone}</a>
+          <a href="#demande" class="btn btn-paper lg:hidden">Demander une pièce</a>
+          <a href={links.directions} target="_blank" rel="noopener" class="btn btn-paper">Itinéraire</a>
+        </div>
+      </div>
+
+      <div id="demande" class="min-w-0 lg:pt-2">
+        <PartForm />
+      </div>
+    </div>
+  </section>
+
+  <!-- Bande : le bon réflexe -->
+  <section class="bg-ink text-paper" aria-label="Le bon réflexe">
+    <div class="hazard h-3" aria-hidden="true"></div>
+    <div class="mx-auto flex max-w-[1240px] flex-col gap-2 px-4 py-7 md:flex-row md:items-baseline md:gap-8 md:px-6">
+      <p class="sign shrink-0 text-[2.2rem] font-black text-signal">Appelez avant de venir</p>
+      <p class="max-w-[60ch] text-[1.1rem]">
+        On démonte la pièce pendant que vous êtes en route, vous passez la récupérer à la caisse.
+        Moins d’attente au comptoir.
+      </p>
+    </div>
+    <div class="hazard h-3" aria-hidden="true"></div>
+  </section>
+
+  <!-- Comment ça marche -->
+  <section class="bg-paper py-16 lg:py-24" aria-labelledby="etapes">
+    <div class="mx-auto max-w-[1240px] px-4 md:px-6">
+      <h2 id="etapes" class="sign text-[3rem] font-black sm:text-[4rem]">Comment ça marche</h2>
+
+      <ol class="road relative mt-12 grid gap-12 md:grid-cols-3 md:gap-8">
+        {
+          steps.map((s, i) => (
+            <li class="relative flex gap-5 md:flex-col md:gap-6">
+              <span class="borne" aria-hidden="true">
+                <span class="borne-cap">N1</span>
+                <span class="borne-num">{i + 1}</span>
+              </span>
+              <div class="pt-2 md:pt-0">
+                <h3 class="sign text-[2rem] font-extrabold">
+                  <span class="sr-only">Étape {i + 1} : </span>
+                  {s.title}
+                </h3>
+                <p class="mt-2 max-w-[34ch] text-concrete-dark">{s.text}</p>
+                {s.stamp && <p class="stamp mt-4">En stock</p>}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Services : étiquettes de pièce -->
+  <section id="services" class="border-y-4 border-ink bg-concrete py-16 lg:py-24" aria-labelledby="services-titre">
+    <div class="mx-auto max-w-[1240px] px-4 md:px-6">
+      <div class="grid gap-4 lg:grid-cols-[1fr_1fr] lg:items-end">
+        <h2 id="services-titre" class="sign text-[3rem] font-black sm:text-[4rem]">Nos services</h2>
+        <p class="max-w-[52ch] text-[1.1rem]">
+          Une casse pour trouver la pièce, un atelier pour la monter. Sur place : plusieurs comptoirs,
+          dont un comptoir dédié aux pièces électriques, une caisse centrale et l’atelier.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-12">
+        <article class="tag lg:col-span-7 lg:row-span-2"><div class="tag-body">
+          <p class="tag-ref">Réf. PCE &nbsp;|&nbsp; Casse</p>
+          <h3 class="sign mt-3 text-[2.6rem] font-black sm:text-[3.2rem]">Pièces d’occasion</h3>
+          <p class="mt-3 max-w-[48ch]">Des pièces démontées sur des véhicules d’occasion, vendues au comptoir. Dites-nous ce qu’il vous faut, on regarde ce qu’on a.</p>
+          <ul class="mt-6 grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+            {['Moteurs', 'Boîtes de vitesses', 'Électricité (comptoir dédié)', 'Carrosserie', 'Optiques et feux', 'Et le reste : demandez'].map((p) => (
+              <li class="flex min-h-[44px] items-center border-b-2 border-ink/15 font-semibold">{p}</li>
+            ))}
+          </ul>
+          <a href="#demande" class="btn btn-ink mt-7">Demander une pièce</a>
+        </div></article>
+
+        <article class="tag lg:col-span-5"><div class="tag-body">
+          <p class="tag-ref">Réf. ATL &nbsp;|&nbsp; Atelier</p>
+          <h3 class="sign mt-3 text-[2.3rem] font-black">Montage en atelier</h3>
+          <p class="mt-2">Vous achetez la pièce chez nous, l’atelier la monte sur votre véhicule.</p>
+          <p class="mt-2 text-[0.95rem] text-concrete-dark">Pièces achetées ailleurs : <span class="todo">[À CONFIRMER]</span></p>
+        </div></article>
+
+        <article class="tag lg:col-span-5"><div class="tag-body">
+          <p class="tag-ref">Réf. MEC &nbsp;|&nbsp; Atelier</p>
+          <h3 class="sign mt-3 text-[2.3rem] font-black">Mécanique générale</h3>
+          <p class="mt-2">Boîtes de vitesses, embrayages : le travail se fait à l’atelier, sur place.</p>
+        </div></article>
+
+        <article class="tag tag-pending lg:col-span-6"><div class="tag-body">
+          <p class="tag-ref">Réf. RAC</p>
+          <h3 class="sign mt-3 text-[2rem] font-black">Rachat de véhicules</h3>
+          <p class="mt-2"><span class="todo">[À CONFIRMER]</span> Service proposé ou non, et conditions.</p>
+        </div></article>
+
+        <article class="tag tag-pending lg:col-span-6"><div class="tag-body">
+          <p class="tag-ref">Réf. EPV</p>
+          <h3 class="sign mt-3 text-[2rem] font-black">Enlèvement d’épave</h3>
+          <p class="mt-2"><span class="todo">[À CONFIRMER]</span> Service proposé ou non, zone et conditions.</p>
+        </div></article>
+      </div>
+
+      <div class="mt-10 grid gap-6 sm:grid-cols-2">
+        <PhotoSlot caption="Le comptoir des pièces électriques, alternateurs et démarreurs rangés derrière." ratio="16 / 9" />
+        <PhotoSlot caption="L’atelier, une voiture sur le pont, le chef d’atelier au travail." ratio="16 / 9" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Garantie & échange -->
+  <section id="garantie" class="bg-ink py-16 text-paper lg:py-24" aria-labelledby="garantie-titre">
+    <div class="mx-auto grid max-w-[1240px] gap-10 px-4 md:px-6 lg:grid-cols-[5fr_7fr]">
+      <div>
+        <h2 id="garantie-titre" class="sign text-[3rem] font-black text-signal sm:text-[4rem]">Garantie &amp; échange</h2>
+        <p class="mt-4 max-w-[40ch] text-[1.1rem] text-concrete">
+          Les règles sont écrites ici, comme au comptoir. Vous les connaissez avant d’acheter.
+        </p>
+        <p class="mt-6 max-w-[40ch] text-[1.05rem]">
+          Une question sur une pièce précise ? Appelez le{" "}
+          <a href={site.phoneHref} class="whitespace-nowrap font-bold text-signal underline underline-offset-4">{site.phone}</a>.
+        </p>
+      </div>
+
+      <div class="border-[3px] border-signal bg-signal p-[3px]">
+        <dl class="divide-y-2 divide-ink/25 border-2 border-ink bg-signal text-ink">
+          <div class="grid gap-1 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-4">
+            <dt class="sign text-[1.6rem] font-extrabold">Prix</dt>
+            <dd>Demandez le prix avant de vous déplacer, par téléphone ou avec le formulaire.</dd>
+          </div>
+          <div class="grid gap-1 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-4">
+            <dt class="sign text-[1.6rem] font-extrabold">Garantie</dt>
+            <dd>Durée de garantie des pièces d’occasion : <span class="todo !bg-ink !text-signal">[À CONFIRMER]</span></dd>
+          </div>
+          <div class="grid gap-1 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-4">
+            <dt class="sign text-[1.6rem] font-extrabold">Échange</dt>
+            <dd>Délai pour échanger une pièce : <span class="todo !bg-ink !text-signal">[À CONFIRMER]</span>. Justificatif demandé : <span class="todo !bg-ink !text-signal">[À CONFIRMER]</span></dd>
+          </div>
+          <div class="grid gap-1 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-4">
+            <dt class="sign text-[1.6rem] font-extrabold">Pièces électriques</dt>
+            <dd>Test avant la vente : <span class="todo !bg-ink !text-signal">[À CONFIRMER]</span></dd>
+          </div>
+          <div class="grid gap-1 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-4">
+            <dt class="sign text-[1.6rem] font-extrabold">Paiement</dt>
+            <dd>Carte bancaire et sans contact, à la caisse centrale. Gardez votre ticket.</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Avis -->
+  <section class="bg-signal py-16 lg:py-24" aria-labelledby="avis-titre">
+    <div class="mx-auto max-w-[1240px] px-4 md:px-6">
+      <h2 id="avis-titre" class="sign text-[3rem] font-black sm:text-[4rem]">Ce qu’en disent les clients</h2>
+      <div class="mt-10 grid gap-8 md:grid-cols-3">
+        {
+          reviews.map((r, i) => (
+            <figure class={`border-l-[6px] border-ink pl-5 ${i === 1 ? 'md:mt-10' : ''} ${i === 2 ? 'md:mt-20' : ''}`}>
+              <blockquote class="text-[1.3rem] font-semibold leading-snug">« {r} »</blockquote>
+              <figcaption class="mt-3 text-[0.95rem]">Avis Google</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      <p class="mt-12 flex flex-wrap items-center gap-x-5 gap-y-2 border-t-[3px] border-ink pt-5">
+        <span>Note Google : <strong>{site.rating.value}/5</strong> sur {site.rating.count} avis.</span>
+        <a href={links.googleListing} target="_blank" rel="noopener" class="inline-flex min-h-[44px] items-center font-bold underline underline-offset-4">
+          Lire tous les avis sur Google
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Infos pratiques -->
+  <section id="infos" class="bg-paper py-16 lg:py-24" aria-labelledby="infos-titre">
+    <div class="mx-auto max-w-[1240px] px-4 md:px-6">
+      <h2 id="infos-titre" class="sign text-[3rem] font-black sm:text-[4rem]">Horaires et accès</h2>
+
+      <div class="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[5fr_7fr] [&>*]:min-w-0">
+        <div>
+          <Status />
+          <table class="mt-5 w-full border-[3px] border-ink text-left">
+            <caption class="sr-only">Horaires d’ouverture</caption>
+            <tbody>
+              {
+                hours.map((h) => (
+                  <tr data-day={h.day} class="hours-row border-b-2 border-ink/15">
+                    <th scope="row" class="px-4 py-3 font-semibold">
+                      {h.label}
+                      {h.day === 0 && <span class="ml-2 bg-ink px-2 py-0.5 text-[0.8rem] font-bold text-signal">matin</span>}
+                    </th>
+                    <td class="px-4 py-3 text-right tabular-nums">
+                      {fmt(h.open)} – {fmt(h.close)}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <p class="mt-4 max-w-[44ch]">
+            <strong>Ouvert le dimanche matin</strong>, de 9h00 à 13h00 : pratique quand la panne tombe le week-end.
+          </p>
+          <p class="mt-2 text-[0.95rem] text-concrete-dark">Jours fériés : <span class="todo">[À CONFIRMER]</span></p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 [&>*]:min-w-0">
+          <div>
+            <h3 class="sign text-[1.8rem] font-extrabold">Adresse</h3>
+            <address class="mt-2 not-italic">
+              {site.name}<br />
+              {site.street}<br />
+              {site.postalCode} {site.city}
+            </address>
+            <a href={site.phoneHref} class="mt-1 inline-flex min-h-[44px] items-center text-[1.2rem] font-bold underline underline-offset-4">{site.phone}</a>
+          </div>
+          <div>
+            <h3 class="sign text-[1.8rem] font-extrabold">Accès</h3>
+            <p class="mt-2">Au numéro 16 de la route de Calais, la RN1, côté Groslay.</p>
+            <p class="mt-2 text-[0.95rem] text-concrete-dark">Stationnement : <span class="todo">[À CONFIRMER]</span></p>
+          </div>
+          <div>
+            <h3 class="sign text-[1.8rem] font-extrabold">Sur place</h3>
+            <ul class="mt-2 list-[square] space-y-1 pl-5">
+              <li>Plusieurs comptoirs</li>
+              <li>Un comptoir pièces électriques</li>
+              <li>Une caisse centrale</li>
+              <li>Un atelier</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="sign text-[1.8rem] font-extrabold">Paiement</h3>
+            <p class="mt-2">Carte bancaire, sans contact.</p>
+            <h3 class="sign mt-5 text-[1.8rem] font-extrabold">Communes proches</h3>
+            <p class="mt-2">Groslay, {site.neighbours.join(', ')}.</p>
+          </div>
+
+          <div class="sm:col-span-2">
+            <div id="carte" class="map-facade relative flex min-h-[300px] flex-col items-start justify-end gap-3 border-[3px] border-ink bg-concrete p-5">
+              <p class="mb-auto flex items-center gap-3 border-[3px] border-ink bg-paper px-4 py-2" aria-hidden="true">
+                <span class="cartouche px-2 py-1 text-[1.4rem]">N1</span>
+                <span class="sign text-[2rem] font-black">Groslay, n° 16</span>
+              </p>
+              <p class="max-w-[44ch] text-[0.95rem]">La carte Google Maps se charge seulement si vous la demandez. Google peut alors déposer des cookies.</p>
+              <div class="flex flex-wrap gap-3">
+                <button type="button" data-map={links.mapEmbed} class="btn btn-ink">Afficher la carte</button>
+                <a href={links.directions} target="_blank" rel="noopener" class="btn btn-paper">Itinéraire</a>
+              </div>
+            </div>
+          </div>
+          <PhotoSlot class="sm:col-span-2" ratio="16 / 7" caption="La façade et l’entrée depuis la RN1, le panneau MSA lisible, pour qu’on vous repère en arrivant." />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="border-t-4 border-ink bg-concrete py-16 lg:py-24" aria-labelledby="faq-titre">
+    <div class="mx-auto grid max-w-[1240px] gap-10 px-4 md:px-6 lg:grid-cols-[4fr_8fr]">
+      <h2 id="faq-titre" class="sign text-[3rem] font-black sm:text-[4rem]">Questions fréquentes</h2>
+      <div class="border-t-[3px] border-ink">
+        {
+          faqs.map((f) => (
+            <details class="faq border-b-[3px] border-ink">
+              <summary class="flex min-h-[60px] cursor-pointer list-none items-center justify-between gap-4 py-3 text-[1.15rem] font-bold [&::-webkit-details-marker]:hidden">
+                {f.q}
+                <span class="faq-icon sign text-[2rem] font-black" aria-hidden="true">+</span>
+              </summary>
+              <p class="max-w-[62ch] pb-5">
+                {f.confirmed ? f.a : <span class="todo">[À CONFIRMER]</span>}
+              </p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script is:inline>
+  // Carte Google Maps chargée au clic seulement.
+  document.querySelectorAll('[data-map]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var box = document.getElementById('carte');
+      var iframe = document.createElement('iframe');
+      iframe.src = btn.getAttribute('data-map');
+      iframe.title = 'Carte : MSA Multi Services Auto, 16 route de Calais, Groslay';
+      iframe.loading = 'lazy';
+      iframe.referrerPolicy = 'no-referrer-when-downgrade';
+      iframe.className = 'h-[360px] w-full border-[3px] border-ink';
+      box.replaceWith(iframe);
+      iframe.focus();
+    });
+  });
+</script>
+
+<style>
+  /* Bornes kilométriques de route nationale (capuchon rouge) */
+  .borne {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    width: 96px;
+    border: 3px solid var(--color-ink);
+    border-radius: 48px 48px 4px 4px;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    z-index: 1;
+  }
+  .borne-cap {
+    background: var(--color-stock);
+    color: #fff;
+    font-family: var(--font-sign);
+    font-weight: 800;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 14px 0 4px;
+    border-bottom: 3px solid var(--color-ink);
+  }
+  .borne-num {
+    font-family: var(--font-sign);
+    font-weight: 900;
+    font-size: 4.5rem;
+    line-height: 1;
+    text-align: center;
+    padding: 6px 0 10px;
+  }
+  /* La route qui relie les bornes */
+  .road::before {
+    content: '';
+    position: absolute;
+    left: 38px;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background:
+      linear-gradient(var(--color-paper) 50%, transparent 0) center / 3px 22px repeat-y,
+      var(--color-ink);
+  }
+  @media (min-width: 768px) {
+    .road::before {
+      left: 0;
+      right: 0;
+      top: 72px;
+      bottom: auto;
+      width: auto;
+      height: 20px;
+      background:
+        linear-gradient(90deg, var(--color-paper) 50%, transparent 0) center / 22px 3px repeat-x,
+        var(--color-ink);
+    }
+  }
+  .stamp {
+    display: inline-block;
+    transform: rotate(-4deg);
+    border: 3px solid var(--color-stock);
+    color: var(--color-stock);
+    font-family: var(--font-sign);
+    font-weight: 900;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    padding: 2px 12px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Étiquettes de pièce : coins coupés + œillet */
+  .tag {
+    --cut: 1.6rem;
+    background: var(--color-ink);
+    padding: 3px;
+    clip-path: polygon(var(--cut) 0, 100% 0, 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)), 0 var(--cut));
+    display: flex;
+  }
+  .tag-body {
+    position: relative;
+    flex: 1;
+    background: #fff;
+    padding: 1.6rem 1.6rem 1.8rem 3.4rem;
+    clip-path: polygon(
+      calc(var(--cut) - 1px) 0, 100% 0, 100% 100%, calc(var(--cut) - 1px) 100%,
+      0 calc(100% - var(--cut) + 1px), 0 calc(var(--cut) - 1px)
+    );
+  }
+  .tag-body::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 1.8rem;
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 50%;
+    background: var(--color-concrete);
+    border: 3px solid var(--color-ink);
+  }
+  .tag-ref {
+    display: inline-block;
+    background: var(--color-signal);
+    border: 2px solid var(--color-ink);
+    padding: 0 0.5rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+  }
+  .tag-pending {
+    background: var(--color-concrete-dark);
+  }
+  .tag-pending .tag-body {
+    background: var(--color-concrete);
+  }
+  .tag-pending .tag-body::before {
+    background: #fff;
+  }
+
+  .hours-row[data-today='true'] {
+    background: var(--color-signal);
+    font-weight: 700;
+  }
+  .faq[open] .faq-icon {
+    transform: rotate(45deg);
+  }
+  .faq-icon {
+    transition: transform 150ms ease;
+    flex: none;
+  }
+</style>

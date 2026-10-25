@@ -1,0 +1,39 @@
+---
+// Panneau à messages variables : Ouvert / Fermé (rempli par le script de Base.astro).
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+---
+
+<p
+  data-status
+  class={`pmv inline-flex items-center gap-3 border-[3px] border-ink bg-ink px-4 py-2.5 text-signal ${cls}`}
+  role="status"
+>
+  <span class="pmv-led" aria-hidden="true"></span>
+  <span data-status-text class="sign text-[1.55rem] font-extrabold leading-none">
+    Lun–sam 9h–18h, dim 9h–13h
+  </span>
+</p>
+
+<style>
+  .pmv {
+    background-image: radial-gradient(rgb(242 194 0 / 0.09) 1px, transparent 1.4px);
+    background-size: 5px 5px;
+  }
+  .pmv-led {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-signal);
+    flex: none;
+  }
+  .pmv[data-open='true'] .pmv-led {
+    background: #38d46a;
+    box-shadow: 0 0 0 3px rgb(56 212 106 / 0.25);
+  }
+  .pmv[data-open='false'] .pmv-led {
+    background: #ff4b4b;
+  }
+</style>

@@ -1,0 +1,18 @@
+---
+// Emplacement photo en attendant les vraies prises de vue (voir PHOTOS_A_PRENDRE.md).
+// Pour remplacer : importer l'image depuis src/assets et utiliser <Image /> d'astro:assets.
+interface Props {
+  caption: string;
+  ratio?: string;
+  class?: string;
+}
+const { caption, ratio = '4 / 3', class: cls = '' } = Astro.props;
+---
+
+<figure class={`photo-slot relative flex flex-col justify-end border-[3px] border-ink bg-ink p-4 ${cls}`} style={`aspect-ratio: ${ratio}`}>
+  <span class="absolute inset-x-0 top-0 h-3 hazard" aria-hidden="true"></span>
+  <figcaption class="text-[0.95rem] text-paper">
+    <span class="sign block text-[1.4rem] font-extrabold text-signal">Photo à venir</span>
+    {caption}
+  </figcaption>
+</figure>

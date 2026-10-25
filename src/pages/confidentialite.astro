@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base
+  title="Politique de confidentialité | MSA Multi Services Auto"
+  description="Quelles données le site de MSA Multi Services Auto (Groslay) collecte via la demande de pièce, pourquoi, combien de temps, et vos droits."
+>
+  <section class="bg-paper">
+    <div class="prose-legal mx-auto max-w-[1240px] px-4 py-14 md:px-6">
+      <h1 class="sign text-[3.2rem] font-black sm:text-[4.5rem]">Politique de confidentialité</h1>
+
+      <h2>Qui traite vos données</h2>
+      <p>{site.name}, {site.street}, {site.postalCode} {site.city}. Téléphone : <a href={site.phoneHref}>{site.phone}</a>.</p>
+
+      <h2>Ce que nous collectons</h2>
+      <p>Uniquement ce que vous saisissez dans le formulaire « Demander une pièce » :</p>
+      <ul>
+        <li>marque, modèle, année et motorisation du véhicule :</li>
+        <li>immatriculation, si vous choisissez de la donner :</li>
+        <li>la pièce recherchée :</li>
+        <li>votre numéro de téléphone.</li>
+      </ul>
+
+      <h2>Pourquoi</h2>
+      <p>Pour vérifier si nous avons la pièce et vous répondre par téléphone ou SMS. Base légale : votre consentement, donné en cochant la case du formulaire.</p>
+
+      <h2>Qui les reçoit</h2>
+      <p>
+        L’équipe de {site.name}. Le formulaire est transmis par le service Web3Forms, qui fait suivre la demande par e-mail.
+        Vos données ne sont ni vendues ni utilisées pour de la publicité.
+      </p>
+      <p>Si vous utilisez le bouton WhatsApp, votre message passe par WhatsApp (Meta), selon ses propres conditions.</p>
+
+      <h2>Combien de temps</h2>
+      <p>Durée de conservation des demandes : <span class="todo">[À CONFIRMER]</span></p>
+
+      <h2>Cookies et mesure d’audience</h2>
+      <p>
+        Ce site n’utilise ni cookie publicitaire, ni outil de mesure d’audience. La carte Google Maps n’est chargée que si vous
+        cliquez sur « Afficher la carte » : Google peut alors déposer ses propres cookies.
+      </p>
+
+      <h2>Vos droits</h2>
+      <p>
+        Vous pouvez demander l’accès, la correction ou la suppression de vos données, ou retirer votre consentement,
+        en appelant le <a href={site.phoneHref}>{site.phone}</a> ou par courrier à l’adresse ci-dessus.
+        Adresse e-mail dédiée : <span class="todo">[À CONFIRMER]</span>.
+        En cas de désaccord, vous pouvez saisir la CNIL (<a href="https://www.cnil.fr" rel="noopener">cnil.fr</a>).
+      </p>
+    </div>
+  </section>
+</Base>
